@@ -23,5 +23,5 @@ class DomaTestCase(TestCase):
 
     def test_file_change(self):
         d = DocumentFactory()
-        d.file = get_test_document()
+        d.file = get_test_document(sup=True)
         self.assertRaises(ValidationError, d.save)

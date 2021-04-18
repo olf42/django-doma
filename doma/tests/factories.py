@@ -8,9 +8,12 @@ from doma.models import Document, DocumentType
 DOCUMENT_PATH = Path(__file__).parent / "document.pdf"
 
 
-def get_test_document(document_path=DOCUMENT_PATH):
+def get_test_document(document_path=DOCUMENT_PATH, sup=False):
     with open(document_path, "rb") as infile:
-        return SimpleUploadedFile(document_path.name, infile.read())
+        if sup:
+            return SimpleUploadedFile(document_path.name, infile.read())
+        else:
+            return infile.read()
 
 
 class DocumentTypeFactory(factory.django.DjangoModelFactory):
@@ -26,4 +29,6 @@ class DocumentFactory(factory.django.DjangoModelFactory):
 
     name = factory.Sequence(lambda n: "Document %03d" % n)
     type = factory.SubFactory(DocumentTypeFactory)
-    file = get_test_document()
+    file = factory.django.FileField(
+        filename=DOCUMENT_PATH.name, data=get_test_document()
+    )

@@ -1,10 +1,13 @@
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
+from io import BytesIO
+from pdf2image import convert_from_bytes
 from uuid import uuid4
 
-from doma.settings import DOCUMENTS_DIR
+from doma.settings import DOCUMENTS_DIR, PREVIEW_DIR, RENDER_PREVIEW
 
 
 class CreatedModifiedModel(models.Model):
@@ -43,7 +46,7 @@ class Document(CreatedModifiedModel):
         "DocumentType", on_delete=models.PROTECT, related_name="documents"
     )
     uuid = models.UUIDField(unique=True, default=uuid4, editable=False)
-    preview = models.ImageField(null=True, blank=True)
+    preview = models.ImageField(upload_to=PREVIEW_DIR, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     replaces = models.ForeignKey(
         "Document",
@@ -69,5 +72,8 @@ class Document(CreatedModifiedModel):
     def save(self, *args, **kwargs):
         if not self._state.adding and self.file != self.__file:
             raise ValidationError(_("Files are not editable."))
-
+        if not self.preview and RENDER_PREVIEW:
+            preview = BytesIO()
+            convert_from_bytes(self.file.read())[0].save(preview, "JPEG")
+            self.preview = SimpleUploadedFile("preview.jpg", preview.read())
         super().save(*args, **kwargs)

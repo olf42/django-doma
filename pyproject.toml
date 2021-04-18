@@ -16,6 +16,7 @@ python = "^3.9"
 Django = "^3.2"
 Pillow = "^8.2.0"
 freezegun = "^1.1.0"
+pdf2image = "^1.14.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.0"
