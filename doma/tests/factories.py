@@ -1,8 +1,16 @@
 import factory
 import factory.django
+from pathlib import Path
 
-from django.core.files import SimpleUploadedFile
+from django.core.files.uploadedfile import SimpleUploadedFile
 from doma.models import Document, DocumentType
+
+DOCUMENT_PATH = Path(__file__).parent / "document.pdf"
+
+
+def get_test_document(document_path=DOCUMENT_PATH):
+    with open(document_path, "rb") as infile:
+        return SimpleUploadedFile(document_path.name, infile.read())
 
 
 class DocumentTypeFactory(factory.django.DjangoModelFactory):
@@ -12,10 +20,10 @@ class DocumentTypeFactory(factory.django.DjangoModelFactory):
     name = factory.Sequence(lambda n: "Type %03d" % n)
 
 
-class DocumenFactory(factory.django.DjangoModelFactory):
+class DocumentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Document
 
     name = factory.Sequence(lambda n: "Document %03d" % n)
     type = factory.SubFactory(DocumentTypeFactory)
-    file = SimpleUploadedFile("document.pdf", b"123")
+    file = get_test_document()

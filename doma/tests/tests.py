@@ -1,31 +1,27 @@
-from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.exceptions import ValidationError
 from django.db.models import ProtectedError
 from django.test import TestCase
-from doma.models import Document, DocumentType
 from freezegun import freeze_time
-from pathlib import Path
 
-DOCUMENT_PATH = Path(__file__).parent / "document.pdf"
-
-
-def get_test_document(document_path=DOCUMENT_PATH):
-    with open(document_path, "rb") as infile:
-        return SimpleUploadedFile("document.pdf", infile.read())
+from doma.tests.factories import DocumentFactory, DocumentTypeFactory, get_test_document
 
 
 class DomaTestCase(TestCase):
     def setUp(self):
-        self.t = DocumentType.objects.create(name="Test Document")
+        self.t = DocumentTypeFactory()
 
-    def test_document_create(self):
-        """Test if an entry can have both filled debit and credit (shouldn't be possible)."""
-        Document.objects.create(
-            name="Test document", type=self.t, file=get_test_document()
-        )
+    def test_document_delete_protect(self):
+        """Tests if the PROTECT_AFTER switch works correctly."""
+        with freeze_time("2021-01-01"):
+            t_old = DocumentFactory()
+        self.assertRaises(ProtectedError, t_old.delete)
 
     def test_document_delete(self):
-        with freeze_time("2021-01-01"):
-            self.t_old = Document.objects.create(
-                name="Old Test Document", type=self.t, file=get_test_document()
-            )
-        self.assertRaises(ProtectedError, self.t_old.delete)
+        """Tests if the PROTECT_AFTER switch works correctly."""
+        t_new = DocumentFactory()
+        t_new.delete()
+
+    def test_file_change(self):
+        d = DocumentFactory()
+        d.file = get_test_document()
+        self.assertRaises(ValidationError, d.save)

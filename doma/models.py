@@ -1,5 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext as _
 from uuid import uuid4
 
 from doma.settings import DOCUMENTS_DIR
@@ -50,10 +52,22 @@ class Document(CreatedModifiedModel):
         null=True,
         blank=True,
     )
-    file = models.FileField(upload_to=DOCUMENTS_DIR, null=True, blank=True)
+    file = models.FileField(upload_to=DOCUMENTS_DIR, blank=True)
+
+    __file = None
 
     class Meta:
         ordering = ["-created_at"]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__file = self.file
+
     def __str__(self):
         return f"{self.pk} - {self.name}"
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding and self.file != self.__file:
+            raise ValidationError(_("Files are not editable."))
+
+        super().save(*args, **kwargs)
