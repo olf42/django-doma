@@ -16,6 +16,11 @@ class DomaTestCase(TestCase):
             t_old = DocumentFactory()
         self.assertRaises(ProtectedError, t_old.delete)
 
+    def test_preview_image(self):
+        """Test if a preview image is set for the document."""
+        d = DocumentFactory()
+        self.assertIsNotNone(d.preview)
+
     def test_document_delete(self):
         """Tests if the PROTECT_AFTER switch works correctly."""
         t_new = DocumentFactory()
