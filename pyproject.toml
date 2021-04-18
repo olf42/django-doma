@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "django-doma"
-version = "0.1.0"
+version = "0.2.0"
 description = "Simple Document Management for Django"
 authors = ["Florian Rämisch <olf@subsignal.org>"]
 license = "GPL-3.0"
