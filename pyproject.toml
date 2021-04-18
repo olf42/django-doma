@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Simple Document Management for Django"
 authors = ["Florian Rämisch <olf@subsignal.org>"]
 license = "GPL-3.0"
+readme = "README.md"
+repository = "https://github.com/olf42/django-doma"
 
 packages = [
     { include="doma", from="." },
