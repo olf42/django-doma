@@ -3,7 +3,13 @@ from django.db.models import ProtectedError
 from django.test import TestCase
 from freezegun import freeze_time
 
-from doma.tests.factories import DocumentFactory, DocumentTypeFactory, get_test_document
+from doma.models import Document
+from doma.tests.factories import (
+    DocumentFactory,
+    DocumentTypeFactory,
+    get_test_document,
+    DOCUMENT_2_PATH,
+)
 
 
 class DomaTestCase(TestCase):
@@ -30,3 +36,9 @@ class DomaTestCase(TestCase):
         d = DocumentFactory()
         d.file = get_test_document(sup=True)
         self.assertRaises(ValidationError, d.save)
+
+    def test_document_replace_file(self):
+        d = DocumentFactory()
+        d2 = Document.objects.replace(d, get_test_document(DOCUMENT_2_PATH, sup=True))
+        self.assertEquals(d2.replaces, d)
+        print(d2.file.name, d.file.name)

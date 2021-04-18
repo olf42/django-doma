@@ -5,7 +5,9 @@ from pathlib import Path
 from django.core.files.uploadedfile import SimpleUploadedFile
 from doma.models import Document, DocumentType
 
-DOCUMENT_PATH = Path(__file__).parent / "document.pdf"
+DOCUMENT_BASE_PATH = Path(__file__).parent
+DOCUMENT_PATH = DOCUMENT_BASE_PATH / "document.pdf"
+DOCUMENT_2_PATH = DOCUMENT_BASE_PATH / "document_2.pdf"
 
 
 def get_test_document(document_path=DOCUMENT_PATH, sup=False):

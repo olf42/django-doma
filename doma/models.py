@@ -34,6 +34,24 @@ class DocumentType(SlugifiedModel):
     name = models.CharField(max_length=255)
 
 
+class DocumentManager(models.Manager):
+    def replace(self, document, file):
+        """
+        Even though django recommends to just set the pk to None to duplicate
+        an object, we cannot do this here due to the various hooks implemented
+        in the init and save methods of Document.
+        """
+        new_document = self.create(
+            name=document.name,
+            type=document.type,
+            preview=document.preview,
+            content=document.content,
+            replaces=document,
+            file=file,
+        )
+        return new_document
+
+
 class Document(CreatedModifiedModel):
     """
     The default ordering is by created_at (desc), because the contents of a document,
@@ -48,7 +66,7 @@ class Document(CreatedModifiedModel):
     uuid = models.UUIDField(unique=True, default=uuid4, editable=False)
     preview = models.ImageField(upload_to=PREVIEW_DIR, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
-    replaces = models.ForeignKey(
+    replaces = models.OneToOneField(
         "Document",
         on_delete=models.PROTECT,
         related_name="replaced_by",
@@ -56,6 +74,8 @@ class Document(CreatedModifiedModel):
         blank=True,
     )
     file = models.FileField(upload_to=DOCUMENTS_DIR, blank=True)
+
+    objects = DocumentManager()
 
     __file = None
 
@@ -70,7 +90,7 @@ class Document(CreatedModifiedModel):
         return f"{self.pk} - {self.name}"
 
     def save(self, *args, **kwargs):
-        if not self._state.adding and self.file != self.__file:
+        if self.pk and self.file != self.__file:
             raise ValidationError(_("Files are not editable."))
         if not self.preview and RENDER_PREVIEW:
             preview = BytesIO()
