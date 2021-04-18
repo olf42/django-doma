@@ -1,9 +1,8 @@
-from django.conf import settings
 from django.db import models
 from django.utils.text import slugify
 from uuid import uuid4
 
-DOCUMENTS_DIR = getattr(settings, "DOMA_DOCUMENTS_DIR", "documents/")
+from doma.settings import DOCUMENTS_DIR
 
 
 class CreatedModifiedModel(models.Model):
