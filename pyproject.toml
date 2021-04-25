@@ -12,7 +12,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.6"
 Django = "^3.2"
 Pillow = "^8.2.0"
 freezegun = "^1.1.0"
@@ -27,6 +27,7 @@ poetry = "^1.1.6"
 pytest = "^6.2.3"
 pytest-django = "^4.2.0"
 pytest-cov = "^2.11.1"
+tox = "^3.23.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
