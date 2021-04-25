@@ -40,5 +40,5 @@ class DomaTestCase(TestCase):
     def test_document_replace_file(self):
         d = DocumentFactory()
         d2 = Document.objects.replace(d, get_test_document(DOCUMENT_2_PATH, sup=True))
-        self.assertEquals(d2.replaces, d)
+        self.assertEqual(d2.replaces, d)
         print(d2.file.name, d.file.name)
