@@ -30,7 +30,7 @@ linked, but the original is kept in place (as a sort of version control).
 
 Tested with the following versions of Python/Django:
 
-* Django: 2.2, 3.0,, 3.1, 3.2
+* Django: 2.2, 3.0, 3.1, 3.2
 * Python: 3.7, 3.8, 3.9
 * Pypy: Pypy3
 
