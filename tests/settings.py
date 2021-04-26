@@ -4,7 +4,7 @@ USE_TZ = False
 SECRET_KEY = "fake_key_for_testing"
 INSTALLED_APPS = [
     "doma",
-    "doma.tests",
+    "tests",
 ]
 MEDIA_ROOT = tempfile.mkdtemp(prefix="django-doma_test")
 DATABASES = dict(

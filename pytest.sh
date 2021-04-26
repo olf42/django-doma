@@ -1,2 +1,2 @@
 #!/bin/bash
-pytest --cov=./doma doma/tests/tests.py
+PYTHONPATH=. pytest --cov=./doma

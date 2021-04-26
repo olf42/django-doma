@@ -4,7 +4,7 @@ from django.test import TestCase
 from freezegun import freeze_time
 
 from doma.models import Document
-from doma.tests.factories import (
+from tests.factories import (
     DocumentFactory,
     DocumentTypeFactory,
     get_test_document,
