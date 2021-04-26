@@ -3,8 +3,6 @@
 **doma** is a simple document managment app for django.
 It provides the necessary models and view and is ready to be included into your project.
 
-Detailed documentation is in the "docs" directory.
-
 ![django_doma_logo](assets/django-doma-logo.png?raw=true "django-doma-logo")
 
 ## Idea
