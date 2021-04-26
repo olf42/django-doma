@@ -5,6 +5,14 @@ It provides the necessary models and view and is ready to be included into your 
 
 Detailed documentation is in the "docs" directory.
 
+## Compatibility
+
+Tested with the following versions of Python/Django:
+
+* Django: 2.2, 3.0,, 3.1, 3.2
+* Python: 3.7, 3.8, 3.9
+* Pypy: Pypy3
+
 ## Installation
 
 Install `django-doma` using pip:
